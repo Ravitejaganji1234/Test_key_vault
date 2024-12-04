@@ -26,11 +26,15 @@ jobs:
       run: |
         mvn clean install -DskipTests  # Skip tests for faster builds, adjust if needed
 
-    # Step 4: Deploy to Azure Web App using the publish profile
+    # Step 4: List files in the target directory to verify JAR file
+    - name: List files in target directory
+      run: |
+        dir ./target  # Verify if the JAR file is present
+
+    # Step 5: Deploy to Azure Web App using the publish profile
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'taskbackend'  # Replace with your Azure Web App name
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}  # Azure publish profile as secret
-        package: ./target/*.jar  # Path to the generated JAR file (or WAR file if applicable)
-
+        package: ./target/ems-backend-0.0.1-SNAPSHOT.jar  # Path to the generated JAR file (or WAR file if applicable)
